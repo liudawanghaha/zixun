@@ -1,0 +1,187 @@
+
+<link rel="stylesheet" href="css/user.css">
+<link rel="stylesheet" href="css/common.css">
+
+<div class="userContainer">
+	<div class="body">
+		<button class="btn btn-success add">新增</button>
+		<div class="hidden" id="userMessage">
+			<div class="touxiangDiv">
+				<img src="" alt="图片出不来" class="touxiangimage">
+			</div>
+			<p class="hidden">
+				<span>id</span>
+				<span></span>
+			</p>
+			<p>
+				<span>用户名</span>
+				<span></span>
+			</p>
+			<p>
+				<span>真实姓名</span>
+				<span></span>
+			</p>
+			<p>
+				<span>手机号</span>
+				<span></span>
+			</p>
+			<p>
+				<span>email</span>
+				<span></span>
+			</p>
+			<p>
+				<span>状态</span>
+				<span></span>
+			</p>
+		</div>
+	</div>
+
+	<!-- 隐藏模态框 -->
+	<div class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="myTitle">添加用户信息</span>
+					<span class="close myClose">&times;</span>
+				</div>
+				<div class="modal-body">
+					<form action="#">
+						<span class="hidden hiddenId"></span>
+						<p>用户名称:</p>
+						<input type="text" class="userName">
+						<p>真实姓名:</p>
+						<input type="text" class="realName">
+						<p>输入密码:</p>
+						<input type="password" class="password">
+						<p>确认密码:</p>
+						<input type="password" class="repassword">
+						<p>email:</p>
+						<input type="text" class="email">
+						<p>请选择头像:</p>
+						<input type="text" class="touxiang">
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default myClose">取消</button>
+					<button class="btn btn-danger submit">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		// 设置当前栏目内容区域的高度
+		$(".userContainer").height($("#rightContentBody").height()-30);
+
+		// 获取信息
+		$.get("http://120.78.164.247:8099/manager/user/findAllUser",function(results){
+			// console.log(results.data);
+			results.data.forEach(function(item,index){
+				// console.log(item);
+				var cloneDiv=$("#userMessage:first").clone(true);
+				cloneDiv.removeAttr("class");
+				$("#userMessage").parent().append(cloneDiv);
+				//头像
+				// $("#touxiangimage").attr("src",item.userface);
+				// console.log(item.userface);
+				if(item.userface){
+					$(".touxiangimage").attr("src",item.userface);
+				}else{
+					// alert("abc");
+					$(".touxiangimage").attr("src","images/touxiang.png");
+				}
+				if(cloneDiv.children()[1].children[0].innerText=="id"){
+					cloneDiv.children()[1].children[1].innerText=item.id;
+				}
+				if(cloneDiv.children()[2].children[0].innerText=="用户名"){
+					cloneDiv.children()[2].children[1].innerText=item.username;
+				}
+				if(cloneDiv.children()[3].children[0].innerText=="真实姓名"){
+					cloneDiv.children()[3].children[1].innerText=item.nickname;
+				}
+				if(cloneDiv.children()[5].children[0].innerText=="email"){
+					cloneDiv.children()[5].children[1].innerText=item.email;
+				}
+			});
+
+			//点击头像删除
+			$(".touxiangDiv").click(function(){
+				// alert(id);
+				var id=$(this).parent().children()[1].children[1].innerHTML;
+				// console.log("点击的id"+id);
+				var o={
+					id:Number(id)
+				};
+				// console.log("点击的头像"+o);
+				$.get("http://120.78.164.247:8099/manager/user/deleteUserById",o,function(results){
+					// console.log("单个删除结果:"+results);
+					// console.log("results.status:"+results.status);
+					if(results.status==200){
+						$("#rightContentBody").load("pages/user.html");
+						alert("删除成功");
+					}else{
+						alert("删除错误");
+					}
+				});
+			});
+
+
+			//新增模态框
+			var regPwd=/^[a-zA-Z]\w{5,17}/ig;
+			var regEmail=/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ig;
+			$(".add").click(function(){
+				var arr=[];
+				$(".modal").modal("show");
+			});
+			$(".myClose").click(function(){
+				$(".modal").modal("hide");
+			});
+			$(".submit").click(function(){
+				var o={};
+				// alert(item.value);
+				if($("input").val()){
+					o.username=$(".userName").val();
+					o.nickname=$(".realName").val();
+					o.userface=$(".touxiang").val();
+					// console.log("userface"+o.userface);
+					var resPassword=regPwd.test($(".password").val());
+					var resEmail=regEmail.test($(".email").val());
+					// console.log(resPassword);
+					// console.log(resEmail);
+					if(resPassword && ($(".password").val())==($(".repassword").val())){
+						o.password=$(".password").val();
+						if(resEmail){
+							o.email=$(".email").val();
+
+							//提交请求
+							$.post("http://120.78.164.247:8099/manager/user/saveOrUpdateUser",o,function(results){
+								if(results.status==200){
+									$("#rightContentBody").load("pages/user.html");
+									// alert("abc");
+								}else{
+									alert("添加错误");
+								}
+							});
+							$(".modal").modal("hide");
+						}else{
+							$(".email").css({
+								"border":"1px solid red"
+							});
+						}
+					}else{
+						$(".password").css({
+							"border":"1px solid red"
+						});
+						alert("请输入正确信息");
+					}
+				}else{
+					alert("请输入信息");
+				}
+			});
+		});
+
+		
+	});
+</script>
+

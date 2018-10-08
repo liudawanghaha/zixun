@@ -1,0 +1,244 @@
+
+<link rel="stylesheet" href="css/lanmu.css">
+<link rel="stylesheet" href="css/common.css">
+
+<div class="lanmuContent">
+	<div class="btns">
+		<button class="btn btn-success add">添加</button>
+		<button class="btn btn-danger batchDelete">批量删除</button>
+	</div>
+	<table class="table table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th>编号</th>
+				<th>栏目名称</th>
+				<th>父栏目</th>
+				<th>描述</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="hidden">
+				<td>
+					<input type="checkbox" value="" class="myCheck">
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>
+					<i class="glyphicon glyphicon-pencil update"></i>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<i class="glyphicon glyphicon-trash deleteById"></i>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<!-- 隐藏模态框 -->
+	<div class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<span class="myTitle">添加栏目信息</span>
+					<span class="close myClose">&times;</span>
+				</div>
+				<div class="modal-body">
+					<form action="#">
+						<span class="hidden hiddenId"></span>
+						<p>栏目名称:</p>
+						<input type="text" class="lanmuName">
+						<p>描述:</p>
+						<input type="text" class="des">
+						<p>父栏目:</p>
+						<select name="" id="parent">
+							<option value="">---请选择---</option>
+						</select>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default myClose">取消</button>
+					<button class="btn btn-danger submit">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		// 设置当前栏目内容区域的高度
+		$(".lanmuContent").height($("#rightContentBody").height()-50);
+
+		// 请求所有栏目信息
+		$.get("http://120.78.164.247:8099/manager/category/findAllCategory",function(results){
+			console.log(results);
+			var lanmus=results.data;
+			lanmus.forEach(function(item){
+				var cloneTr=$(".hidden").clone();
+				cloneTr.removeAttr("class");
+				//设置每一个tr的内容
+				cloneTr.children(":first").children(":first").val(item.id);
+				$(cloneTr.children()[1]).text(item.name);
+				$(cloneTr.children()[3]).text(item.comment);
+				if(item.parent){
+					$(cloneTr.children()[2]).text(item.parent.name);
+					
+				}else{
+					$(cloneTr.children()[2]).text("无");
+				}
+				$("tbody").append(cloneTr);
+
+				//追加模态框中父栏目的option
+				var option="<option value='"+item.id+"'>"+item.name+"</option>"
+				$("#parent").append(option);
+			});//findAll结束
+
+			//批量删除
+			$(".batchDelete").click(function(){
+				var ids=[];
+				$(".myCheck:checked").each(function(index,item){
+					var id=$(item).val();
+					ids.push(id);
+				});
+				if(ids.length){
+					var o={
+						ids:ids.toString()
+					}
+					$.post("http://120.78.164.247:8099/manager/category/batchDeleteCategory",o,function(results){
+						// console.log("批量删除:"+results);
+						if(results.status==200){
+							$("#rightContentBody").load("pages/lanmu.html");
+						}else{
+
+						}
+					});
+				}else{
+					alert("请勾选要要删除的数据");
+				}
+			});
+
+			//添加按钮
+			$(".add").click(function(){
+				//修改模态框标题
+				$(".myTitle").text("添加栏目信息");
+				//模态框显示之前先清空表单内容
+				$(".lanmuName").val("");
+				$(".des").val("");
+				$("#parent").val("");
+				$(".hiddenId").text("");
+
+				//显示模态框
+				$(".modal").modal("show");
+			});
+
+			//修改按钮
+			$(".update").click(function(){
+				$(".modal").modal("show");
+				//修改模态框标题
+				$(".myTitle").text("修改栏目信息");
+				//获取当前行数据进行展示
+				var name=$(this).parent().parent().children()[1].innerHTML;
+				var des=$(this).parent().parent().children()[3].innerHTML;
+				var parent=$(this).parent().parent().children()[2].innerHTML;
+				//获取id 放在隐藏元素中用来判断是否为修改
+				var hiddenId=$(this).parent().parent().children(":first").children().val();
+				// alert($(this).parent().parent().children().children(":first").val());
+				$(".hiddenId").text(hiddenId);
+
+				var id=lanmus.filter(function(item){
+					return item.name==parent;
+				})[0].id;
+				//设置给模态框
+				$(".lanmuName").val(name);
+				$(".des").val(des);
+				$("#parent").val(id);
+
+			});
+
+			//模态框确认按钮
+			$(".submit").click(function(){
+				var name=$(".lanmuName").val();
+				var des=$(".des").val();
+				var parent=$("#parent").val();
+				var hiddenId=$(".hiddenId").text();
+				// alert(hiddenId);
+				if(hiddenId){
+					//此时id存在，应该修改
+					if(name&&des){
+						if(parent){
+							var o={
+								id:hiddenId,
+								name:name,
+								comment:des,
+								parentId:parent,
+								no:1
+							}
+						}else{
+							var o={
+								id:hiddenId,
+								name:name,
+								comment:des,
+								no:1
+							}
+						}
+					}else{
+						alert("请输入信息");
+					}
+				}else{
+					//此时id不存在，应该添加
+					if(name&&des){
+						if(parent){
+							var o={
+								name:name,
+								comment:des,
+								parentId:parent,
+								no:1
+							}
+						}else{
+							var o={
+								name:name,
+								comment:des,
+								no:1
+							}
+						}
+					}else{
+						alert("请输入信息");
+					}
+				}
+				//发送保存/更新请求
+				$.post("http://120.78.164.247:8099/manager/category/saveOrUpdateCategory",o,function(results){
+					// console.log(results);
+					if(results.status==200){
+						$(".modal").modal("hide");
+						$("#rightContentBody").load("pages/lanmu.html");
+					}
+				});
+				
+			});
+
+			//模态框取消按钮
+			$(".myClose").click(function(){
+				$(".modal").modal("hide");
+			});
+
+			//单个删除
+			$(".deleteById").click(function(){
+				var id=$(this).parent().parent().children(":first").children().val();
+				// console.log("点击的id"+id);
+				var o={
+					id:Number(id)
+				};
+				// console.log("点击的对象:"+Number(id));
+				// console.log("点击的类型:"+typeof(Number(id)));
+				$.get("http://120.78.164.247:8099/manager/category/deleteCategoryById",o,function(results){
+					// console.log("abc"+results);
+					// console.log("result.status:"+results.status);
+					if(results.status==200){
+						console.log("单个删除结果:"+results);
+						$("#rightContentBody").load("pages/lanmu.html");
+					}else{
+						alert("删除错误");
+					}
+				});
+			});
+		});
+	});
+</script>

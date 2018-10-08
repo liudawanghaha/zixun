@@ -1,0 +1,30 @@
+/*栏目内容区域*/
+.lanmuContent{
+	width: 98%;
+	background-color: #fff;
+	margin-left: 10px;
+	margin-top: 10px;
+	overflow: scroll;
+}
+div.btns{
+	margin-left: 10px;
+	margin-top: 10px;
+}
+button{
+	margin-left: 10px;
+}
+.lanmuContent table{
+	width: 90%;
+	margin: 20px;
+}
+.lanmuContent table th,.lanmuContent table td{
+	text-align: center;
+}
+.lanmuContent .modal-header{
+	font-size: 30px;
+}
+.lanmuContent .modal-body input,select{
+	width: 500px;
+	text-align: center;
+	height: 50px;
+}

@@ -1,0 +1,309 @@
+<link rel="stylesheet" href="css/shouye.css">
+<div class="content">
+	<div class="content_top">
+		<div class="col-md-3">
+			<div class="one">
+				<div class="circleDiv">
+					<i class="iconfont icon-yun"></i>
+				</div>
+				<span>99.9%</span>
+			</div>
+			<div class="two">
+				<div class="circleDiv">
+					<i class="iconfont icon-user"></i>
+				</div>
+				<span>117K</span>
+			</div>
+			<div class="three">
+				<div class="circleDiv">
+					<i class="iconfont icon-18"></i>
+				</div>
+				<span>2,470</span>
+			</div>
+		</div>
+		<div class="col-md-6 contentTop_center">
+			<div class="zhexian" style="width:100%;height:260px;">
+				
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="contentRight_top" style="width:100%;height:125px;"></div>
+			<div class="contentRight_bottom" style="width:100%;height:125px;"></div>
+		</div>
+	</div>
+	<div class="content_bottom">
+		<div class="col-md-6">
+            <div class="contentBottom_left" style="width:370px">
+                
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="contentBottom_right" style="width:370px">
+                
+            </div>
+        </div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		//折线图
+		$(".zhexian").highcharts({
+            title: {
+                text: 'Monthly Average Temperature',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr']
+            },
+            yAxis: {
+                title: {
+                    text: 'Temperature (°C)'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: '°C'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Tokyo',
+                data: [7.0, 6.9, 9.5, 14.5]
+            }, {
+                name: 'New York',
+                data: [-0.2, 0.8, 5.7, 11.3]
+            }]
+        });
+
+		//柱状图
+		$('.contentRight_top').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: 'Rainfall'
+            },
+            xAxis: {
+                categories: [
+                    'Jan',
+                    'Feb'
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rainfall (mm)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Tokyo',
+                data: [49.9, 71.5]
+    
+            }, {
+                name: 'New York',
+                data: [83.6, 78.8]
+    
+            }]
+        });
+
+		//扇形图
+		$('.contentRight_bottom').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Population'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: ['Africa', 'America', 'Asia'],
+                title: {
+                    text: null
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'millions',
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' millions'
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 100,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor || '#FFFFFF'),
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Year 1800',
+                data: [107, 31, 635]
+            }, {
+                name: 'Year 1900',
+                data: [133, 156, 947]
+            }, {
+                name: 'Year 2008',
+                data: [973, 914, 4054]
+            }]
+        });
+
+        //扇形图
+        $(".contentBottom_left").highcharts({
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 45,
+                    beta: 0
+                }
+            },
+            title: {
+                text: 'Browser market shares at a specific website, 2014'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Browser share',
+                data: [
+                    ['Firefox',   45.0],
+                    ['IE',       26.8],
+                    {
+                        name: 'Chrome',
+                        y: 12.8,
+                        sliced: true,
+                        selected: true
+                    },
+                    ['Safari',    8.5],
+                    ['Opera',     6.2],
+                    ['Others',   0.7]
+                ]
+            }]
+        });
+
+         $(".contentBottom_right").highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Historic World Population by Region'
+            },
+            subtitle: {
+                text: 'Source: Wikipedia.org'
+            },
+            xAxis: {
+                categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
+                title: {
+                    text: null
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Population (millions)',
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            tooltip: {
+                valueSuffix: ' millions'
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 100,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor || '#FFFFFF'),
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Year 1800',
+                data: [107, 31, 635, 203, 2]
+            }, {
+                name: 'Year 1900',
+                data: [133, 156, 947, 408, 6]
+            }, {
+                name: 'Year 2008',
+                data: [973, 914, 4054, 732, 34]
+            }]
+        });
+	});
+</script>

@@ -1,0 +1,89 @@
+.container{
+	border-radius: 5px;
+}
+.leftNav{
+	height: 800px;
+}
+.leftNav .leftNavHeader{
+	background-color: #3D556D;
+	height: 38px;
+}
+.leftNav .leftNavHeader img{
+	width: 40px;
+	height: 38px;
+	margin-left: 20px;
+}
+.leftNav .leftNavHeader span{
+	color: #FFF;
+	font-size: 16px;
+	/*margin-left: 20px;*/
+}
+.leftNav .leftNavBody{
+	background-color: #282830;
+	height: 762px;
+	overflow: hidden;
+}
+.leftNav .leftNavBody ul li{
+	list-style: none;
+	color: #FFF;
+	height: 30px;
+	border-bottom: 1px solid #333;
+	cursor:pointer;
+}
+.leftNav .leftNavBody ul:first-child{
+	margin-top: 42px;
+}
+.leftNav .leftNavBody ul li i{
+	color: #FFF;
+}
+.leftNav .leftNavBody ul li :first-child{
+	margin-left: 10px;
+}
+.leftNav .leftNavBody ul li :nth-child(2){
+	margin-left: 10px;
+}
+.leftNav .leftNavBody ul li #firstIcon{
+	margin-left: 52px;
+}
+.leftNav .leftNavBody ul li :last-child{
+	margin-left: 25px;
+}
+.rightContent .rightContentHeader{
+	height: 38px;
+	font-size: 22px;
+}
+.rightContent .rightContentHeader img{
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	margin-left: 550px;
+}
+.rightContent .rightContentHeader i{
+	font-size: 26px;
+	margin-left: 20px;
+}
+.rightContentHeader #sub{
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	color: #fff;
+	text-align: center;
+	line-height: 15px;
+	background-color: red;
+	border-radius: 50%;
+	position: relative;
+	left: -24px;
+	top: -8px;
+	font-size: 12px;
+}
+/*.rightContent .rightContentHeader i:nth-child(2){
+	margin-left: 35px;
+}*/
+.rightContent #rightContentBody{
+	height: 762px;
+	background-color: #F0F0F0;
+	/*padding: 5px;*/
+	overflow: hidden;
+}
+
+
